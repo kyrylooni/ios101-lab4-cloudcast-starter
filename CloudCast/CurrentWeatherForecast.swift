@@ -8,6 +8,34 @@
 import Foundation
 import UIKit
 
+struct WeatherAPIResponse: Decodable {
+  let currentWeather: CurrentWeatherForecast
+
+  private enum CodingKeys: String, CodingKey {
+    case currentWeather = "current_weather"
+  }
+}
+
+
+struct CurrentWeatherForecast: Decodable {
+    let windSpeed: Double
+    let windDirection: Double
+    let temperature: Double
+    let weatherCodeRaw: Int
+
+    var weatherCode: WeatherCode {
+        return WeatherCode(rawValue: weatherCodeRaw) ?? .clearSky
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case windSpeed = "windspeed"
+        case windDirection = "winddirection"
+        case temperature = "temperature"
+        case weatherCodeRaw = "weathercode"
+    }
+}
+
+
 // Based on https://open-meteo.com/en/docs
 enum WeatherCode: Int {
   case clearSky = 0
